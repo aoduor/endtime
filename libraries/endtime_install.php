@@ -1,6 +1,6 @@
 <?php
 /**
- * Performs install/uninstall methods for the actionable plugin
+ * Performs install/uninstall methods for the endtime plugin
  *
  * PHP version 5
  * LICENSE: This source file is subject to LGPL license 
@@ -24,7 +24,7 @@ class Endtime_Install {
 	}
 
 	/**
-	 * Creates the required database tables for the actionable plugin
+	 * Creates the required database tables for the endtime plugin
 	 */
 	public function run_install()
 	{
@@ -40,7 +40,7 @@ class Endtime_Install {
 	}
 
 	/**
-	 * Deletes the database tables for the actionable module
+	 * Deletes the database tables for the endtime module
 	 */
 	public function uninstall()
 	{

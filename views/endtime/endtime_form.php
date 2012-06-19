@@ -1,5 +1,3 @@
-
-<div class="row">
 	<h4>
 		<?php echo Kohana::lang('endtime.endtime');?>
 		
@@ -37,5 +35,4 @@
 				?>
 			</div>
 	</div>
-</div>
 

@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
-* Model for Actionable
+* Model for Endtime plugin
  *
  * PHP version 5
  * LICENSE: This source file is subject to LGPL license 

@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Actionable Hook - Load All Events
+ * Endtime Hook - Load All Events
  *
  * PHP version 5
  * LICENSE: This source file is subject to LGPL license 
@@ -19,7 +19,8 @@ class endtime {
 	 */
 	public function __construct()
 	{
-		$this->post_data = null; //initialize this for later use	
+		// Initialize this for later use
+		$this->post_data = null; 	
 		// Hook into routing
 		Event::add('system.pre_controller', array($this, 'add'));
 	}
@@ -29,21 +30,34 @@ class endtime {
 	 */
 	public function add()
 	{
-		// Hook into the form itself
+		/* Admin submission form event hooks */
+		// Hook into the admin submission form itself
 		Event::add('ushahidi_action.report_form_admin_after_time', array($this, '_report_form'));
+		
 		// Hook into the report_submit_admin (post_POST) event right before saving
 		Event::add('ushahidi_action.report_submit_admin', array($this, '_report_validate'));
+		
 		// Hook into the report_edit (post_SAVE) event
 		Event::add('ushahidi_action.report_edit', array($this, '_report_form_submit'));
+		
+		/* Frontend submission form event hooks*/
+		// Hook into the frontend report submission form
+		Event::add('ushahidi_action.report_form_frontend_after_time', array($this, '_report_form'));
+		
+		// Hook into the post event right before saving
+		Event::add('ushahidi_action.report_posted_frontend',array($this, '_report_validate'));
+		
+		// Hook into the report being saved
+		Event::add('ushahidi_action.report_add', array($this, '_report_form_submit'));
 
-	
+		/* Frontend report view event hook */
 		// Hook into the Report view (front end)
 		Event::add('ushahidi_action.report_meta_after_time', array($this, '_report_view'));
 		
 	}
 	
 	/**
-	 * Add Actionable Form input to the Report Submit Form
+	 * Add Endtime Form input to the Report Submit Form
 	 */
 	public function _report_form()
 	{
@@ -52,7 +66,7 @@ class endtime {
 		// Get the ID of the Incident (Report)
 		$id = Event::$data;
 		
-		//initialize the array
+		// Initialize the array
 		$form = array
 			(
 			    'end_incident_date'  => '',
@@ -64,7 +78,7 @@ class endtime {
 		
 		if ($id)
 		{
-			// Do We have an Existing Actionable Item for this Report?
+			// Do We have an Existing endtime for this Report?
 			$endtime_item = ORM::factory('endtime')
 				->where('incident_id', $id)
 				->find();
@@ -89,8 +103,9 @@ class endtime {
 				$form['end_incident_ampm'] = date('a', strtotime($endtime_date));
 			}
 		}		
-		else //initialize to now
+		else 
 		{
+			// Initialize to now
 			$view->applicable = 0;
 			$form['end_incident_date'] = date("m/d/Y",time());
 			$form['end_incident_hour'] = date('h', time());
@@ -126,10 +141,8 @@ class endtime {
 	public function _report_form_submit()
 	{
 		$post = $this->post_data;
-		$incident = Event::$data;
+		$incident = Event::$data;	
 		$id = $incident->id;
-		
-		
 		if ($post)
 		{
 			$endtime = ORM::factory('endtime')
@@ -167,7 +180,7 @@ class endtime {
 	}
 	
 	/**
-	 * Render the Action Taken Information to the Report
+	 * Render the endtime Information to the Report
 	 * on the front end
 	 */
 	public function _report_view()
@@ -195,7 +208,7 @@ class endtime {
         return $hour_array;
     }
     
-    	// Time functions
+   	// Time functions
     private function _minute_array()
     {
         for ($i=0; $i <= 59 ; $i++)
@@ -243,6 +256,6 @@ class endtime {
             </script>";
     }
 
-}//end method
+}
 
 new endtime;
